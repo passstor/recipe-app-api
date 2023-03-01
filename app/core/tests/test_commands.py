@@ -1,0 +1,33 @@
+"""
+Тест для кастомних команд Django
+"""
+from unittest.mock import patch
+from psycopg2 import OperationalError as Psycopg2Error
+from django.core.management import call_command
+from django.db.utils import OperationalError
+from django.test import SimpleTestCase
+
+
+@patch('core.management.commands.wait_for_db.Command.check')
+# Патчимо метод check класу Command з wait_for_db.py
+class CommandTests(SimpleTestCase):
+    """Тест для кастомних команд Django"""
+
+    def test_wait_for_db_ready(self, patched_check):
+        """Тест: чекаємо поки база даних буде доступна"""
+        patched_check.return_value = True
+        # Повертаємо True якщо база даних доступна
+        call_command('wait_for_db')  # Викликаємо команду wait_for_db
+        patched_check.assert_called_once_with(databases=['default'])
+        # Перевіряємо чи була викликана команда check
+
+    @patch('time.sleep')  # Патчимо метод sleep з time
+    def test_wait_for_db_delay(self, patched_sleep, patched_check):
+        """Тест: чекаємо поки база даних буде доступна з затримкою"""
+        patched_check.side_effect = [Psycopg2Error] * 2 + \
+                                    [OperationalError] * 3 + [True]
+        # Повертаємо True якщо база даних доступна
+        call_command('wait_for_db')  # Викликаємо команду wait_for_db
+        self.assertEqual(patched_check.call_count, 6)
+        # Перевіряємо чи була викликана команда check 6 разів
+        patched_check.assert_called_with(databases=['default'])
