@@ -6,25 +6,30 @@ from django.test import TestCase
 from django.urls import reverse
 from django.test import Client
 
+
 class AdminSiteTests(TestCase):
     """
     Тест для адмінки
     """
+
     def setUp(self):
         """
         Перед тестом
         """
-        self.client = Client() # створюємо клієнт для тестування адмінки джанго (входить в систему)
+        self.client = Client()  # створюємо клієнт для тестування
+        # адмінки джанго (входить в систему)
         self.admin_user = get_user_model().objects.create_superuser(
             email="admin@example.com",
             password="password123"
         )
-        self.client.force_login(self.admin_user) # force_login - входить в систему
+        self.client.force_login(self.admin_user)
+        # force_login - входить в систему
         self.user = get_user_model().objects.create_user(
             email='user@example.com',
             password='password123',
             name='Test user'
         )
+
     def test_user_list(self):
         """
         Тест для перевірки коректності списку користувачів

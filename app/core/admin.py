@@ -7,6 +7,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 from .models import User
 
+
 class UserAdmin(BaseUserAdmin):
     """
     Кастомізація адмінки
@@ -16,7 +17,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (
-            _('Permissions'),{
+            _('Permissions'), {
                 "fields": (
                     'is_active',
                     'is_staff',
@@ -27,5 +28,6 @@ class UserAdmin(BaseUserAdmin):
         (_('Important dates'), {'fields': ('last_login',)})
     )
     readonly_fields = ['last_login']
+
 
 admin.site.register(User, UserAdmin)
