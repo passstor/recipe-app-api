@@ -12,7 +12,6 @@ from django.test import SimpleTestCase
 # Патчимо метод check класу Command з wait_for_db.py
 class CommandTests(SimpleTestCase):
     """Тест для кастомних команд Django"""
-
     def test_wait_for_db_ready(self, patched_check):
         """Тест: чекаємо поки база даних буде доступна"""
         patched_check.return_value = True
