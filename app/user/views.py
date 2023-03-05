@@ -14,12 +14,14 @@ class CreateUserView(generics.CreateAPIView):
     """
     serializer_class = UserSerializer
 
+
 class CreateTokenView(ObtainAuthToken):
     """
     Створення нового токена для користувача
     """
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
     """

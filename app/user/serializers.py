@@ -24,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         Створення нового користувача
         """
         return get_user_model().objects.create_user(**validated_data)
+
     def update(self, instance, validated_data):
         """
         Оновлення користувача, встановлення пароля
@@ -37,23 +38,24 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
+
 class AuthTokenSerializer(serializers.Serializer):
     """
     Серіалізатор для авторизації користувача за токенем
     """
-    email= serializers.EmailField()
+    email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type': 'password'},
         trim_whitespace=False
     )
 
-    def validate(self,attrs):
+    def validate(self, attrs):
         """
         Перевірка та авторизація користувача
         """
-        email= attrs.get('email')
+        email = attrs.get('email')
         password = attrs.get('password')
-        user= authenticate(
+        user = authenticate(
             request=self.context.get('request'),
             username=email,
             password=password,
