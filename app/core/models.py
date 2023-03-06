@@ -1,6 +1,7 @@
 """
 Модель для роботи з базою даних
 """
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -53,3 +54,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()  # менеджер користувачів
 
     USERNAME_FIELD = 'email'  # поле для входа в систему
+
+
+class Recipe(models.Model):
+    """
+    Об'єкт рецепта
+    """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # зв'язок з моделлю користувача
+        on_delete=models.CASCADE  # поведінка при видаленні користувача
+    )
+    # поле для зв'язку з користувачем
+    title = models.CharField(max_length=255)
+    # поле для назви рецепту
+    description = models.CharField(max_length=255)
+    # поле для опису рецепту
+    time_minutes = models.IntegerField()
+    # поле для часу приготування
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    # поле для ціни
+    link = models.CharField(max_length=255, blank=True)
+
+    # поле для посилання на рецепт
+
+    def __str__(self):
+        return self.title

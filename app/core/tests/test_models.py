@@ -6,6 +6,8 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from core import models
+
+
 class ModelTests(TestCase):
     """
     Тест для моделей
@@ -58,22 +60,24 @@ class ModelTests(TestCase):
         )
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
     def test_create_recipe(self):
         """
         Створення рецепту
         """
-        user=get_user_model().objects.create_user(
+        user = get_user_model().objects.create_user(
             'test@example.com',
             'testpass123'
         )
-        recipe=models.Recipe.objects.create(
+        recipe = models.Recipe.objects.create(
             user=user,
             title='Steak and mushroom sauce',
             time_minutes=5,
             price=Decimal(5.50),
-            description='Place steak in a large resealable plastic bag. Add the steak sauce, Worcestershire sauce, '
-                        'garlic powder, onion powder, and black pepper. Seal the bag, and shake to coat. Refrigerate '
+            description='Place steak in a large resealable plastic bag. '
+                        'Add the steak sauce, Worcestershire sauce, '
+                        'garlic powder, onion powder, and black pepper. '
+                        'Seal the bag, and shake to coat. Refrigerate '
                         'for at least 2 hours.'
         )
         self.assertEqual(str(recipe), recipe.title)
-
