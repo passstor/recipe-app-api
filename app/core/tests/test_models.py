@@ -63,7 +63,7 @@ class ModelTests(TestCase):
 
     def test_create_recipe(self):
         """
-        Створення рецепту
+        Створення рецепта
         """
         user = get_user_model().objects.create_user(
             'test@example.com',
