@@ -12,7 +12,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """
     Вью для рецептів
     """
-    serializer_class = serializers.RecipeSerializer
+    serializer_class = serializers.RecipeDetailSerializer
     queryset = Recipe.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -22,6 +22,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
         Отримання рецептів для поточного користувача
         """
         return self.queryset.filter(user=self.request.user).order_by('-id')
+
+    def get_serializer_class(self):
+        """
+        Повертає серіалізатор для деталей рецепта
+        """
+        if self.action == 'list':
+            return serializers.RecipeSerializer
+        return self.serializer_class
 
     def perform_create(self, serializer):
         """
