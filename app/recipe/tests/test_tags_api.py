@@ -13,6 +13,13 @@ from recipe.serializers import TagSerializer
 TAGS_URL = reverse('recipe:tag-list')
 
 
+def detail_url(tag_id):
+    """
+    Повертає URL для деталей тега
+    """
+    return reverse('recipe:tag-detail', args=[tag_id])
+
+
 def create_user(email='email@email.com', password='testpass123'):
     """
     Створення і повернення користувача
@@ -75,3 +82,25 @@ class PrivateTagsApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], tag.name)
         self.assertEqual(res.data[0]['id'], tag.id)
+
+    def test_update_tag(self):
+        """
+        Тест для оновлення тега
+        """
+        tag = Tag.objects.create(user=self.user, name='Afters')
+        payload = {'name': 'New Afters'}
+        url = detail_url(tag.id)
+        res = self.client.patch(url, payload)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        tag.refresh_from_db()
+        self.assertEqual(tag.name, payload['name'])
+
+    def test_delete_tad(self):
+        """
+        Тест для видалення тега
+        """
+        tag = Tag.objects.create(user=self.user, name='Afters')
+        url = detail_url(tag.id)
+        res = self.client.delete(url)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Tag.objects.filter(id=tag.id).exists())

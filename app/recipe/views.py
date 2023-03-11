@@ -39,7 +39,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 
 class TagViewSet(viewsets.GenericViewSet,
-                 mixins.ListModelMixin):
+                 mixins.ListModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin,):
     """
     Вью для тегів
     """

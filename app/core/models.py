@@ -67,7 +67,7 @@ class Recipe(models.Model):
     # поле для зв'язку з користувачем
     title = models.CharField(max_length=255)
     # поле для назви рецепту
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
     # поле для опису рецепту
     time_minutes = models.IntegerField()
     # поле для часу приготування
