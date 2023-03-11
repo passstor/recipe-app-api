@@ -74,8 +74,25 @@ class Recipe(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     # поле для ціни
     link = models.CharField(max_length=255, blank=True)
-
     # поле для посилання на рецепт
+    tags = models.ManyToManyField('Tag')
 
     def __str__(self):
         return self.title
+
+
+class Tag(models.Model):
+    """
+    Об'єкт тегу
+    """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # зв'язок з моделлю користувача
+        on_delete=models.CASCADE  # поведінка при видаленні користувача
+    )
+    # поле для зв'язку з користувачем
+    name = models.CharField(max_length=255)
+
+    # поле для назви тегу
+
+    def __str__(self):
+        return self.name

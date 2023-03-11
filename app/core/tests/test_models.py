@@ -8,6 +8,13 @@ from django.contrib.auth import get_user_model
 from core import models
 
 
+def create_user(email='user@example.com', password='testpass123'):
+    """
+    Створення і виведенння користувача
+    """
+    return get_user_model().objects.create_user(email, password)
+
+
 class ModelTests(TestCase):
     """
     Тест для моделей
@@ -81,3 +88,14 @@ class ModelTests(TestCase):
                         'for at least 2 hours.'
         )
         self.assertEqual(str(recipe), recipe.title)
+
+    def test_create_tag(self):
+        """
+        Створення тегу
+        """
+        user = create_user()
+        tag = models.Tag.objects.create(
+            user=user,
+            name='Tag1'
+        )
+        self.assertEqual(str(tag), tag.name)
