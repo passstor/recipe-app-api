@@ -76,6 +76,9 @@ class Recipe(models.Model):
     link = models.CharField(max_length=255, blank=True)
     # поле для посилання на рецепт
     tags = models.ManyToManyField('Tag')
+    # зв'язок з моделлю тегів
+    ingredients = models.ManyToManyField('Ingredient')
+    # зв'язок з моделлю інгредієнтів
 
     def __str__(self):
         return self.title
@@ -93,6 +96,21 @@ class Tag(models.Model):
     name = models.CharField(max_length=255)
 
     # поле для назви тегу
+
+    def __str__(self):
+        return self.name
+
+
+class Ingredient(models.Model):
+    """
+    Об'єкт інгредієнта
+    """
+    name = models.CharField(max_length=255)
+    # поле для назви інгредієнта
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # зв'язок з моделлю користувача
+        on_delete=models.CASCADE  # поведінка при видаленні користувача
+    )
 
     def __str__(self):
         return self.name
