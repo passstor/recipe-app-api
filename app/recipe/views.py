@@ -4,7 +4,7 @@
 from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from core.models import Recipe, Tag
+from core.models import Recipe, Tag, Ingredient
 from recipe import serializers
 
 
@@ -41,7 +41,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin,
                  mixins.UpdateModelMixin,
-                 mixins.DestroyModelMixin,):
+                 mixins.DestroyModelMixin, ):
     """
     Вью для тегів
     """
@@ -53,5 +53,21 @@ class TagViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         """
         Отримання тегів для поточного користувача
+        """
+        return self.queryset.filter(user=self.request.user).order_by('-name')
+
+
+class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    Вью для інгредієнтів
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Ingredient.objects.all()
+    serializer_class = serializers.IngredientSerializer
+
+    def get_queryset(self):
+        """
+        Отримання інгредієнтів для поточного користувача
         """
         return self.queryset.filter(user=self.request.user).order_by('-name')
