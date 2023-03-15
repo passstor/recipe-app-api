@@ -377,6 +377,48 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(recipe.ingredients.count(), 0)
         self.assertNotIn(ingredient, recipe.ingredients.all())
 
+    def test_filter_by_tags(self):
+        """
+        Тест для перевірки чи можна фільтрувати рецепти по тегах
+        """
+        recipe1 = create_recipe(user=self.user, title='Recipe 1')
+        recipe2 = create_recipe(user=self.user, title='Recipe 2')
+        tag1 = Tag.objects.create(user=self.user, name='Tag 1')
+        tag2 = Tag.objects.create(user=self.user, name='Tag 2')
+        recipe1.tags.add(tag1)
+        recipe2.tags.add(tag2)
+        recipe3 = create_recipe(user=self.user, title='Recipe 3')
+        params = {'tags': f'{tag1.id},{tag2.id}'}
+        res = self.client.get(RECIPES_URL, params)
+        serializer1 = RecipeSerializer(recipe1)
+        serializer2 = RecipeSerializer(recipe2)
+        serializer3 = RecipeSerializer(recipe3)
+        self.assertIn(serializer1.data, res.data)
+        self.assertIn(serializer2.data, res.data)
+        self.assertNotIn(serializer3.data, res.data)
+
+    def test_filter_by_ingredients(self):
+        """
+        Тест для перевірки чи можна фільтрувати рецепти по інгредієнтах
+        """
+        recipe1 = create_recipe(user=self.user, title='Recipe 1')
+        recipe2 = create_recipe(user=self.user, title='Recipe 2')
+        ingredient1 = Ingredient.objects.create(
+            user=self.user, name='Ingredient 1')
+        ingredient2 = Ingredient.objects.create(
+            user=self.user, name='Ingredient 2')
+        recipe1.ingredients.add(ingredient1)
+        recipe2.ingredients.add(ingredient2)
+        recipe3 = create_recipe(user=self.user, title='Recipe 3')
+        params = {'ingredients': f'{ingredient1.id},{ingredient2.id}'}
+        res = self.client.get(RECIPES_URL, params)
+        serializer1 = RecipeSerializer(recipe1)
+        serializer2 = RecipeSerializer(recipe2)
+        serializer3 = RecipeSerializer(recipe3)
+        self.assertIn(serializer1.data, res.data)
+        self.assertIn(serializer2.data, res.data)
+        self.assertNotIn(serializer3.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """
