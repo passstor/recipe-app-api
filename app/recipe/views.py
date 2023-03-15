@@ -109,7 +109,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
 )
 class BaseRecipeAttrViewSet(viewsets.GenericViewSet,
-                            mixins.CreateModelMixin,
+                            # mixins.CreateModelMixin,
                             mixins.ListModelMixin,
                             mixins.UpdateModelMixin,
                             mixins.DestroyModelMixin, ):
